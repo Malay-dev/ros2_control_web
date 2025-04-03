@@ -25,7 +25,6 @@ const GraphVisualization = ({
   data,
   selectedNode,
   setSelectedNode,
-  zoomLevel,
   onZoomChange,
 }: GraphVisualizationProps) => {
   const svgRef = useRef<SVGSVGElement | null>(null);
