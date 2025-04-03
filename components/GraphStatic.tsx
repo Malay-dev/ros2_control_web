@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
 import { useState } from "react";
@@ -6,17 +5,17 @@ import type { Node, GraphData } from "@/lib/GraphTypes";
 import { useWebSocket } from "@/hooks/useWebSocket";
 import { useGraphData } from "@/hooks/useGraphData";
 import GraphControls from "@/components/graph/GraphControls";
-import GraphVisualization from "@/components/graph/GraphVisualization";
+import StaticGraphVisualization from "@/components/graph/StaticGraphVisualization";
 import NodeList from "@/components/graph/NodeList";
 import NodeDetails from "@/components/graph/NodeDetails";
 import GraphStatistics from "@/components/graph/GraphStatistics";
 import ConnectionStatus from "@/components/graph/ConnectionStatus";
 import MobileNodePanel from "@/components/graph/MobileNodePanel";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Badge } from "./ui/badge";
+import { Badge } from "@/components/ui/badge";
+import { WebSocketMessage, WebSocketEdge } from "@/lib/GraphTypes";
 import { Grid } from "lucide-react";
-
-const Graph = () => {
+const Graph_Static = () => {
   const [serverUrl, setServerUrl] = useState("ws://localhost:8765");
   const [zoomLevel, setZoomLevel] = useState(1);
   const [selectedNode, setSelectedNode] = useState<Node | null>(null);
@@ -38,13 +37,13 @@ const Graph = () => {
   } = useGraphData(searchTerm);
 
   // Handle WebSocket messages
-  function handleWebSocketMessage(message: any) {
+  function handleWebSocketMessage(message: WebSocketMessage) {
     if (!message.type) return;
 
     switch (message.type) {
       case "full_graph":
         if (!message.edges) return;
-        const graphData = message.edges.map((edge: any) => {
+        const graphData = message.edges.map((edge: WebSocketEdge) => {
           let parsedMetadata = {};
           if (edge.metadata) {
             try {
@@ -170,18 +169,19 @@ const Graph = () => {
   return (
     <div className="flex flex-col md:flex-row h-screen w-full bg-white">
       {/* Sidebar */}
-      <div className="w-full md:w-96 p-4 border-b md:border-r border-gray-200 bg-white overflow-y-auto h-screen pb-32 shadow-sm">
+      <div className="w-full md:w-96 p-4 border-b md:border-r border-gray-200 bg-white overflow-y-auto shadow-sm">
         <div className="flex items-center justify-between mb-4">
           <h2 className="text-lg font-semibold text-gray-800">
-            Dynamic Graph View
+            Static Graph View
           </h2>
           <Badge
             variant="outline"
             className="bg-blue-50 text-blue-700 border-blue-200 flex items-center gap-1">
             <Grid className="h-3.5 w-3.5" />
-            <span>Dynamic Layout</span>
+            Static Layout
           </Badge>
         </div>
+
         <Tabs defaultValue="controls">
           <TabsList className="grid w-full grid-cols-2">
             <TabsTrigger value="controls">Controls</TabsTrigger>
@@ -229,8 +229,9 @@ const Graph = () => {
 
       {/* Main Graph Area */}
       <div className="flex-1 relative bg-gray-50">
-        <GraphVisualization
+        <StaticGraphVisualization
           data={data}
+          nodes={allNodes}
           selectedNode={selectedNode}
           setSelectedNode={setSelectedNode}
           zoomLevel={zoomLevel}
@@ -252,4 +253,4 @@ const Graph = () => {
   );
 };
 
-export default Graph;
+export default Graph_Static;

@@ -1,10 +1,10 @@
 "use client";
 
-import Graph from "@/components/Graph";
+import GraphStatic from "@/components/GraphStatic";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 
-export default function Home() {
+export default function StaticGraphPage() {
   return (
     <main className="flex flex-col items-center p-0 h-screen w-screen overflow-hidden">
       <div className="w-full bg-white border-b border-gray-200 shadow-sm">
@@ -12,17 +12,17 @@ export default function Home() {
           <h1 className="text-xl font-bold text-gray-800">
             ROS 2 Control Ecosystem Visualizer
           </h1>
-          <Link href="/static-graph">
+          <Link href="/">
             <Button
               variant="outline"
               size="sm"
               className="border-gray-300 hover:bg-gray-100">
-              Switch to Static View
+              Switch to Dynamic View
             </Button>
           </Link>
         </div>
       </div>
-      <Graph />
+      <GraphStatic />
     </main>
   );
 }
